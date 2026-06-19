@@ -4,7 +4,7 @@ const API = axios.create({
   baseURL: "https://judge0-ce.p.rapidapi.com",
   headers: {
     "x-rapidapi-host": "judge0-ce.p.rapidapi.com",
-    "x-rapidapi-key": "91d29019d1mshfdc3be96871dbbfp118555jsn5c8f35c60ae0", // 👈 এখানে Key বসাবেন
+    "x-rapidapi-key": "", 
     "Content-Type": "application/json"
   }
 });
