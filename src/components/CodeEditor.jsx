@@ -3,15 +3,14 @@ import React, { useRef, useState } from "react";
 import { LanguageSector } from "./LanguageSector";
 import { Output } from "./Output";
 import { CODE_SNIPPETS, LANGUAGE_VERSIONS } from "../assets/data";
-import { executeCode } from "../assets/api"; 
+import { executeCode } from "../assets/api";
 
 export const CodeEditor = () => {
-
-  const defaultSnippet = CODE_SNIPPETS["javascript"] || ""; 
+  const defaultSnippet = CODE_SNIPPETS["javascript"] || "";
   const editorRef = useRef(null);
   const [value, setValue] = useState(defaultSnippet);
   const [language, setLanguage] = useState("javascript");
-  
+
   const [output, setOutput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -23,12 +22,12 @@ export const CodeEditor = () => {
 
   const handleLanguage = (newLanguage) => {
     setLanguage(newLanguage);
-    setValue(CODE_SNIPPETS[newLanguage] || ""); 
+    setValue(CODE_SNIPPETS[newLanguage] || "");
   };
 
   const runCode = async () => {
     if (!editorRef.current) return;
-    
+
     const sourceCode = editorRef.current.getValue();
     if (!sourceCode.trim()) return;
 
@@ -38,7 +37,7 @@ export const CodeEditor = () => {
     try {
       const version = LANGUAGE_VERSIONS[language];
       const result = await executeCode(language, sourceCode, version);
-      
+
       if (result.error) {
         setIsError(true);
         setOutput(result.error);
@@ -48,7 +47,10 @@ export const CodeEditor = () => {
       }
     } catch (error) {
       setIsError(true);
-      setOutput(error.response?.data?.message || "Compiler server is temporarily overloaded. Please try again in a few moments!");
+      setOutput(
+        error.response?.data?.message ||
+          "Compiler server is temporarily overloaded. Please try again in a few moments!",
+      );
     } finally {
       setIsLoading(false);
     }
@@ -56,13 +58,21 @@ export const CodeEditor = () => {
 
   return (
     <div className="flex flex-col gap-4 max-w-screen-2xl mx-auto h-full">
-      <div className="flex items-center justify-between bg-[#1e1e2e] p-3 rounded-xl border border-gray-800 shadow-md">
-        <LanguageSector onLanguageChange={handleLanguage} currentLanguage={language} />
-        <button 
+      <div className="flex flex-col sm:flex-row items-center justify-between bg-[#1e1e2e] p-3 rounded-xl border border-gray-800 shadow-md gap-4">
+        <div className="w-full sm:w-auto">
+          <LanguageSector
+            onLanguageChange={handleLanguage}
+            currentLanguage={language}
+          />
+        </div>
+
+        <button
           onClick={runCode}
           disabled={isLoading}
-          className={`text-white text-sm font-semibold py-2 px-6 rounded-lg transition-all duration-200 shadow-md ${
-            isLoading ? "bg-gray-600 cursor-not-allowed opacity-50" : "bg-green-600 hover:bg-green-500 active:scale-95"
+          className={`w-full sm:w-auto text-white text-sm font-semibold py-2 px-6 rounded-lg transition-all duration-200 shadow-md ${
+            isLoading
+              ? "bg-gray-600 cursor-not-allowed opacity-50"
+              : "bg-green-600 hover:bg-green-500 active:scale-95"
           }`}
         >
           {isLoading ? "Running..." : "Run Code"}
@@ -78,7 +88,7 @@ export const CodeEditor = () => {
             value={value}
             onChange={(newValue) => setValue(newValue || "")}
             onMount={handleEditorDidMount}
-            options={{  fontSize: 16, padding: { top: 16 }, wordWrap: "on" }}
+            options={{ fontSize: 16, padding: { top: 16 }, wordWrap: "on" }}
           />
         </div>
         <div className="h-full">

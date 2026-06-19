@@ -10,7 +10,7 @@ function App() {
           <span className="text-blue-500">Ts</span>Codrr
         </h1>
       </header>
-      <main className="flex-grow p-4 md:p-6">
+      <main className="grow p-4 md:p-6">
         <CodeEditor />
       </main>
     </div>
